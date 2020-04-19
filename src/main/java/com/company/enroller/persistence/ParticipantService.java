@@ -39,4 +39,11 @@ public class ParticipantService {
 		transaction.commit();
 	}
 
+	public Participant update(Participant foundParticipant) {
+		Transaction transaction = this.session.beginTransaction();
+		session.save(foundParticipant);
+		transaction.commit();
+		return foundParticipant;
+	}
+
 }
