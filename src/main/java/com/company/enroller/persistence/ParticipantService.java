@@ -21,9 +21,10 @@ public class ParticipantService {
 		return session.createCriteria(Participant.class).list();
 	}
 	
-	public Participant findByLogin(String login)
-	{
+	public Participant findByLogin(String login) {
+		
 		return (Participant) session.get(Participant.class, login);
+		
 	}
 
 	public Participant add(Participant participant) {
@@ -31,19 +32,21 @@ public class ParticipantService {
 		session.save(participant);
 		transaction.commit();
 		return participant;
-	}
+		}
 
 	public void delete(Participant participant) {
 		Transaction transaction = this.session.beginTransaction();
 		session.delete(participant);
 		transaction.commit();
+		
 	}
 
-	public Participant update(Participant foundParticipant) {
+	public Participant update(Participant participant) {
 		Transaction transaction = this.session.beginTransaction();
-		session.save(foundParticipant);
+		session.update(participant);
 		transaction.commit();
-		return foundParticipant;
+		return participant;
+		
 	}
 
 }

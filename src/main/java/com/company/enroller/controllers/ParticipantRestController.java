@@ -34,46 +34,39 @@ public class ParticipantRestController {
 	return new ResponseEntity(HttpStatus.NOT_FOUND);
 	} 
 
-	return new ResponseEntity<Participant>(participant, HttpStatus.OK);
+	return new ResponseEntity<Participant>(participant, HttpStatus.OK); 
 	}
 	
-	@RequestMapping(value = "", method = RequestMethod.POST)
-	public ResponseEntity<?> registerParticipant(@RequestBody Participant participant) {
-	    Participant foundParticipant = participantService.findByLogin(participant.getLogin());
-	if (participant == null) { 
-	return new ResponseEntity<String>("Unable to register. Participant with login" + participant.getLogin() + "already exists", HttpStatus.CONFLICT);
+	@RequestMapping(value = "", method = RequestMethod.POST) 
+	public ResponseEntity<?> registerParticipant(@RequestBody Participant participant){
+		Participant foundParticipant = participantService.findByLogin(participant.getLogin());
+		if (foundParticipant != null) {
+			return new ResponseEntity<String>(
+					"Unable to register. Participant with login " + participant.getLogin() + " already exists", HttpStatus.CONFLICT);
+		}
+		participantService.add(participant);
+		return new ResponseEntity<Participant>(participant, HttpStatus.CREATED);
 	}
-	
-	participantService.add(participant);
-	return new ResponseEntity<Participant>(participant, HttpStatus.CREATED);
-	}
-	
+
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteParticipant(@PathVariable("id") String login) {
 	    Participant participant = participantService.findByLogin(login);
 	if (participant == null) { 
 	return new ResponseEntity(HttpStatus.NOT_FOUND);
 	} 
-
 	participantService.delete(participant);
-	return new ResponseEntity<Participant>(participant, HttpStatus.OK);
-	//return new ResponseEntity(HttpStatus.NO_CONTENT);
+	return new ResponseEntity<Participant>(participant, HttpStatus.OK); 
 	}
 	
-	@RequestMapping(value = "", method = RequestMethod.PUT)
-	public ResponseEntity<?> updateParticipant(@PathVariable("id") String login, @RequestBody Participant updatedParticipant) {
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	public ResponseEntity<?> updateParticipant(@PathVariable("id") String login, 
+			@RequestBody Participant updateParticipant) {
 	    Participant foundParticipant = participantService.findByLogin(login);
-	if (foundParticipant == null) { 
-	return new ResponseEntity(HttpStatus.NOT_FOUND);
+	    if (foundParticipant == null) {
+	    	return new ResponseEntity(HttpStatus.NOT_FOUND);
+		}
+	    foundParticipant.setPassword(updateParticipant.getPassword());
+		participantService.update(foundParticipant);
+		return new ResponseEntity<Participant>(foundParticipant, HttpStatus.OK);
 	}
-	
-	foundParticipant.setPassword(updatedParticipant.getPassword());
-	participantService.update(foundParticipant);
-	return new ResponseEntity<Participant>(foundParticipant, HttpStatus.OK);
-	}
-	
-	/*GET, DELETE = localhost:8080/participants/id
-	POST = localhost:8080/participants + BODY
-	PUT = localhost:8080/participants/id + BODY*/
-	
 }
