@@ -22,9 +22,7 @@ public class ParticipantService {
 	}
 	
 	public Participant findByLogin(String login) {
-		
-		return (Participant) session.get(Participant.class, login);
-		
+		return (Participant) session.get(Participant.class, login);	
 	}
 
 	public Participant add(Participant participant) {
@@ -38,7 +36,6 @@ public class ParticipantService {
 		Transaction transaction = this.session.beginTransaction();
 		session.delete(participant);
 		transaction.commit();
-		
 	}
 
 	public Participant update(Participant participant) {
@@ -46,7 +43,6 @@ public class ParticipantService {
 		session.update(participant);
 		transaction.commit();
 		return participant;
-		
 	}
 
 }
