@@ -44,5 +44,4 @@ public class ParticipantService {
 		transaction.commit();
 		return participant;
 	}
-
 }

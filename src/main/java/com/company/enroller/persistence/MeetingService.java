@@ -2,6 +2,8 @@ package com.company.enroller.persistence;
 
 import java.util.Collection;
 
+import javax.persistence.JoinColumn;
+
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -35,4 +37,11 @@ public class MeetingService {
 		transaction.commit();
 		return meeting;
 		}
+	
+	public Meeting update(Meeting meeting) {
+		Transaction transaction = this.session.beginTransaction();
+		session.update(meeting);
+		transaction.commit();
+		return meeting;
+	}
 }
