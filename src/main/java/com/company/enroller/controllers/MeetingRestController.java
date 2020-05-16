@@ -108,4 +108,27 @@ public class MeetingRestController {
 		meetingService.update(foundMeeting);
 		return new ResponseEntity<Meeting>(foundMeeting, HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "/{id}/{login}", method = RequestMethod.DELETE) 
+	public ResponseEntity<?> deleteParticipantFromMeeting(@PathVariable("id") long id, @PathVariable("login") String login){
+		Meeting desiredMeeting = meetingService.findById(id);
+		Participant participantToAdd = participantService.findByLogin(login);
+		
+		if (desiredMeeting == null) {
+			return new ResponseEntity<String>(
+					"Unable to remove participant. Meeting with ID " + id + " does not exists", HttpStatus.NOT_FOUND);
+		}
+		if (participantToAdd == null) {
+			return new ResponseEntity<String>(
+					"Unable to remove participant. Participant with login " + login + " does not exists", HttpStatus.NOT_FOUND);
+		}
+		
+		if (!desiredMeeting.getParticipants().contains(participantToAdd)) {
+			return new ResponseEntity<String>(
+					"Unable to remove participant. Participant with login " + participantToAdd.getLogin() + " is not assigned to this meeting", HttpStatus.CONFLICT);
+		}
+		desiredMeeting.removeParticipant(participantToAdd);
+		desiredMeeting = meetingService.update(desiredMeeting);
+		return new ResponseEntity<Collection<Participant>>(desiredMeeting.getParticipants(), HttpStatus.OK);
+	}
 }
