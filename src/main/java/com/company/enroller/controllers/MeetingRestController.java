@@ -42,4 +42,16 @@ public class MeetingRestController {
 		meetingService.add(meeting);
 		return new ResponseEntity<Meeting>(meeting, HttpStatus.CREATED);
 	}
+	
+	@RequestMapping(value = "/{id}/participants", method = RequestMethod.GET)
+	public ResponseEntity<?> getMeetingParticipants(@PathVariable("id") long id) {
+		Meeting desiredMeeting = meetingService.findById(id);
+		
+		if (desiredMeeting == null) { 
+			return new ResponseEntity<Meeting>(HttpStatus.NOT_FOUND);
+		}
+		
+		Collection<Participant> participants = desiredMeeting.getParticipants();
+		return new ResponseEntity<Collection<Participant>>(participants, HttpStatus.OK); 
+	}
 }
