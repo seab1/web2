@@ -24,9 +24,9 @@ public class MeetingRestController {
 		return new ResponseEntity<Collection<Meeting>>(meetings, HttpStatus.OK);
 	}
 
-	/*@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getMeeting(@PathVariable("id") long id) {
 		Meeting meeting = meetingService.findById(id);
 		return new ResponseEntity<Meeting>(meeting, HttpStatus.OK);
-	}*/
+	}
 }
